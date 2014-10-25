@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">PlayToPulsar</string>
+    <string name="action_settings">Settings</string>
+    <string name="xbmc_connection_status">XBMC Connection status</string>
+    <string name="push_to_pulsar">Push to pulsar</string>
+
+    <!-- preferences -->
+    <string name="pref_host_category">XBMC host address</string>
+    <string name="host_direction_title">complete host address</string>
+    <string name="host_direction_summary">pattern: ip or name[:port]</string>
+    <string name="no_torrent_to_push">no torrent to push</string>
+
+</resources>

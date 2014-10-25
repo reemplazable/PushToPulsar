@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/pref_host_category" android:key="pref_key_storage_settings">
+        <EditTextPreference android:key="pref_host_direction"
+        android:title="@string/host_direction_title"
+        android:summary="@string/host_direction_summary"/>
+    </PreferenceCategory>
+</PreferenceScreen>
