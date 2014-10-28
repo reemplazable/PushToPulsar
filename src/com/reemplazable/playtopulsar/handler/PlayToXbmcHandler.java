@@ -1,9 +1,9 @@
 package com.reemplazable.playtopulsar.handler;
 
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
@@ -22,13 +22,13 @@ public class PlayToXbmcHandler extends Handler {
 	}
 		
 	private ExecutorService executor;
-	private SharedPreferences prefs;
+	private Map<String, ?> params;
 	private Uri uri;
 	private Site site;
 	
 	public PlayToXbmcHandler(PlayToPulsarActivity activity) {
 		executor = Executors.newFixedThreadPool(1);
-		prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+		params = PreferenceManager.getDefaultSharedPreferences(activity).getAll();
 	}
 	
 	@Override
@@ -49,21 +49,17 @@ public class PlayToXbmcHandler extends Handler {
 	public void playToXbmc(Uri uri, Site site) {
 		this.uri = uri;
 		this.site = site;
-		this.execute(new PlayToXbmcRunnable(getHostDirection(), this));
+		this.execute(new PlayToXbmcRunnable(params, this));
 	}
 
 	private void stopPlayer(int playerId) {
-		this.execute(new StopPlayerRunnable(getHostDirection(), playerId));
+		this.execute(new StopPlayerRunnable(params, playerId));
 	}
 	
 	private void playFile(Uri uri, Site site) {
-		this.execute(new PlayItemRunnable(getHostDirection(), uri, site));
+		this.execute(new PlayItemRunnable(params, uri, site));
 	}
 
-	private String getHostDirection() {
-		return prefs.getString("pref_host_direction" , "");
-	}
-	
 	private void execute(Runnable runnable) {
 		executor.execute(runnable);
 	}

@@ -1150,13 +1150,21 @@ containing a value of this type.
         public static final int abc_shareactionprovider_share_with_application=0x7f0b000b;
         public static final int action_settings=0x7f0b000e;
         public static final int app_name=0x7f0b000d;
-        public static final int host_direction_summary=0x7f0b0013;
-        public static final int host_direction_title=0x7f0b0012;
-        public static final int no_torrent_to_push=0x7f0b0014;
+        public static final int host_direction_summary=0x7f0b0014;
+        public static final int host_direction_title=0x7f0b0013;
+        public static final int no_torrent_to_push=0x7f0b0015;
+        public static final int pref_auth_switch_off=0x7f0b0017;
+        public static final int pref_auth_switch_on=0x7f0b0016;
         /**  preferences 
          */
-        public static final int pref_host_category=0x7f0b0011;
+        public static final int pref_host_category=0x7f0b0012;
+        public static final int pref_password=0x7f0b001a;
+        public static final int pref_password_summary=0x7f0b001b;
+        public static final int pref_switch_auth_summary=0x7f0b001c;
+        public static final int pref_username=0x7f0b0018;
+        public static final int pref_username_summary=0x7f0b0019;
         public static final int push_to_pulsar=0x7f0b0010;
+        public static final int toast_need_host=0x7f0b0011;
         public static final int xbmc_connection_status=0x7f0b000f;
     }
     public static final class style {

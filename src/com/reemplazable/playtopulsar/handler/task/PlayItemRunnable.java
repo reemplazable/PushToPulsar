@@ -2,6 +2,7 @@ package com.reemplazable.playtopulsar.handler.task;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Map;
 
 import android.net.Uri;
 
@@ -12,8 +13,8 @@ public class PlayItemRunnable extends XbmcConnection implements Runnable {
 	private Site site;
 	private Uri uri;
 
-	public PlayItemRunnable(String hostDirection, Uri uri, Site site) {
-		super(hostDirection);
+	public PlayItemRunnable(Map<String,?> params, Uri uri, Site site) {
+		super(params);
 		this.uri = uri;
 		this.site = site;
 	}

@@ -1,6 +1,7 @@
 package com.reemplazable.playtopulsar.handler.task;
 
 import java.io.IOException;
+import java.util.Map;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -8,8 +9,8 @@ import org.apache.http.client.ResponseHandler;
 
 public class XbmcGetActivePlayersRunnable extends XbmcConnection implements Runnable {
 
-	protected XbmcGetActivePlayersRunnable(String hostDirection) {
-		super(hostDirection);
+	protected XbmcGetActivePlayersRunnable(Map<String,?> params) {
+		super(params);
 	}
 
 	@Override

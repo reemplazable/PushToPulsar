@@ -19,6 +19,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.reemplazable.playtopulsar.handler.CheckXbmcConnectionActivityHandler;
@@ -72,6 +73,8 @@ public class PlayToPulsarActivity extends ActionBarActivity {
 		String host = preferences.getString("pref_host_direction", "");
 		Log.d(TAG, "host: " + host);
 		if (host.length() <= 0) {
+			Toast toast = Toast.makeText(getApplicationContext(), R.string.toast_need_host, Toast.LENGTH_LONG);
+			toast.show();
 			launchSettingsActivity();
 		} else {
 			this.checkXbmcConnectionhandler = new CheckXbmcConnectionActivityHandler(this);

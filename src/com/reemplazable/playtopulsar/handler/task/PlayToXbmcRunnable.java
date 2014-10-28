@@ -1,5 +1,7 @@
 package com.reemplazable.playtopulsar.handler.task;
 
+import java.util.Map;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,8 +17,8 @@ public class PlayToXbmcRunnable extends XbmcConnection implements Runnable{
 
 	private Handler handler;
 
-	public PlayToXbmcRunnable(String hostDirection, Handler handler) {
-		super(hostDirection);
+	public PlayToXbmcRunnable(Map<String,?> params, Handler handler) {
+		super(params);
 		this.handler = handler;
 	}
 

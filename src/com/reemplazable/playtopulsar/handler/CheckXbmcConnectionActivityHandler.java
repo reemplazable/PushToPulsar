@@ -1,9 +1,9 @@
 package com.reemplazable.playtopulsar.handler;
 
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
@@ -19,12 +19,12 @@ public class CheckXbmcConnectionActivityHandler extends Handler{
 	
 	private PlayToPulsarActivity activity;
 	private ExecutorService executor;
-	private SharedPreferences prefs;
+	private Map<String, ?> params;
 	
 	public CheckXbmcConnectionActivityHandler(PlayToPulsarActivity activity) {
 		this.activity = activity;
 		executor = Executors.newFixedThreadPool(1);
-		prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+		params = PreferenceManager.getDefaultSharedPreferences(activity).getAll();
 		
 	}
 	
@@ -40,7 +40,9 @@ public class CheckXbmcConnectionActivityHandler extends Handler{
 	}
 	
 	public void checkConnection() {
-		executor.execute(new CheckXbmcConnectionRunnable(prefs.getString("pref_host_direction" , ""), this));
+		CheckXbmcConnectionRunnable connection = null;
+		connection = new CheckXbmcConnectionRunnable(params, this);
+		executor.execute(connection);
 	}
 
 }

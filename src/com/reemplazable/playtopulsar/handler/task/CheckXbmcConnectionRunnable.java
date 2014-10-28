@@ -1,5 +1,7 @@
 package com.reemplazable.playtopulsar.handler.task;
 
+import java.util.Map;
+
 import com.reemplazable.playtopulsar.handler.CheckXbmcConnectionActivityHandler;
 
 import android.os.Handler;
@@ -10,8 +12,8 @@ public class CheckXbmcConnectionRunnable extends XbmcConnection implements Runna
 
 	private Handler handler;
 	
-	public CheckXbmcConnectionRunnable(String hostDirection, Handler handler) {
-		super(hostDirection);
+	public CheckXbmcConnectionRunnable(Map<String, ?> params, Handler handler) {
+		super(params);
 		this.handler = handler;
 	}
 	
