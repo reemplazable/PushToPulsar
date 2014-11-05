@@ -1,7 +1,8 @@
 package com.reemplazable.playtopulsar;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.security.NoSuchAlgorithmException;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,13 +25,14 @@ import android.widget.ToggleButton;
 
 import com.reemplazable.playtopulsar.handler.CheckXbmcConnectionActivityHandler;
 import com.reemplazable.playtopulsar.handler.PlayToXbmcHandler;
-import com.reemplazable.playtopulsar.handler.URLFactory;
+import com.reemplazable.torrenttomagnet.TorrentToMagnet;
 
 public class PlayToPulsarActivity extends ActionBarActivity {
 
 	private CheckXbmcConnectionActivityHandler checkXbmcConnectionhandler;
 	private PlayToXbmcHandler playToXbmcHandler;
 	private static final String TAG = "PlayToPulsarActivity";
+	private String uriString = null;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,6 @@ public class PlayToPulsarActivity extends ActionBarActivity {
                     .commit();
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -61,52 +62,71 @@ public class PlayToPulsarActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
     
-//	@Override
-//	protected void onPostCreate(Bundle savedInstanceState) {
-//		super.onPostCreate(savedInstanceState);
-//	}
-	
 	@Override
 	protected void onResume() {
 		super.onResume();
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		String host = preferences.getString("pref_host_direction", "");
+		this.checkXbmcConnectionhandler = new CheckXbmcConnectionActivityHandler(this);
 		Log.d(TAG, "host: " + host);
-		if (host.length() <= 0) {
+		if (host != null && host.length() <= 0) {
 			Toast toast = Toast.makeText(getApplicationContext(), R.string.toast_need_host, Toast.LENGTH_LONG);
 			toast.show();
 			launchSettingsActivity();
+			checkXbmcConnectionhandler.checkConnection();
 		} else {
-			this.checkXbmcConnectionhandler = new CheckXbmcConnectionActivityHandler(this);
 			checkXbmcConnectionhandler.checkConnection();
 			this.playToXbmcHandler = new PlayToXbmcHandler(this);
 			Uri uri = getUri(getIntent());
 			if (uri != null) {
-				TextView text = (TextView) findViewById(R.id.textXBMCUri);
-				text.setText(uri.toString());
+				try {
+					TextView text = (TextView) findViewById(R.id.textXBMCUri);
+					String uriTextString = transformMagnet(uri);
+					if (uriTextString != null) {
+						text.setText(uriTextString);
+						this.uriString = URLEncoder.encode(uriTextString, "UTF-8");
+					}
+				} catch (IOException e) {
+					showError(e, uri);
+				} catch (NoSuchAlgorithmException e) {
+					showError(e, uri);
+				}
 			}
 		}
+	}
+
+	private void showError(Exception e, Uri uri) {
+		Toast toast = Toast.makeText(getApplicationContext(), "Error on: " + uri.toString() + " " + e.getMessage(), Toast.LENGTH_LONG);
+		toast.show();
+	}
+
+	private String transformMagnet(Uri uri)
+			throws NoSuchAlgorithmException, IOException {
+		String magnet = null;
+		if (uri.getScheme().contains("file")) {
+			magnet = transformFileToMagnet(uri);
+		} else {
+			magnet = transformUriToMagnet(uri);
+		}
+		return magnet;
+	}
+
+	private String transformUriToMagnet(Uri uri) {
+		return uri.toString();
+	}
+
+	private String transformFileToMagnet(Uri uri) throws NoSuchAlgorithmException, IOException {
+		TorrentToMagnet torrentToMagnet = new TorrentToMagnet();
+		return torrentToMagnet.toMagnet(uri);
 	}
 	
 	private Uri getUri(Intent intent) {
 		String action = intent.getAction();
 		Uri uri = null;
-		if (Intent.ACTION_SEND.equals(action)) {
-			String stringExtra = intent.getStringExtra(Intent.EXTRA_TEXT);
-			uri = Uri.parse(getSharedText(stringExtra));
-		}
 		if (Intent.ACTION_VIEW.equals(action)) {
 			uri = intent.getData();
 		}
 		return uri;
-	}
-	
-	public String getSharedText(String stringExtra) {
-		Pattern pattern = Pattern.compile("(http|https).*");
-		Log.d(TAG, "StringExtra: " + stringExtra);
-		Matcher matcher = pattern.matcher(stringExtra);
-		matcher.find();
-		return matcher.group(0);
 	}
 
 	private void launchSettingsActivity() {
@@ -117,13 +137,12 @@ public class PlayToPulsarActivity extends ActionBarActivity {
 	public void activateConnection() {
 		ToggleButton xbmcStatus = (ToggleButton) findViewById(R.id.toggleButton1);
 		xbmcStatus.setChecked(true);
-		final Uri uri = getUri(getIntent());
-		if (uri != null) {
+		if (uriString != null) {
 			Button button = (Button) findViewById(R.id.sendToXBMCButton);
 			button.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					playToXbmcHandler.playToXbmc(uri, URLFactory.getURL(uri));
+					playToXbmcHandler.playToXbmc(uriString);
 				}
 			});
 			button.setEnabled(true);

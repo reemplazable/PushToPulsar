@@ -4,13 +4,11 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 
 import com.reemplazable.playtopulsar.PlayToPulsarActivity;
-import com.reemplazable.playtopulsar.handler.URLFactory.Site;
 import com.reemplazable.playtopulsar.handler.task.PlayItemRunnable;
 import com.reemplazable.playtopulsar.handler.task.PlayToXbmcRunnable;
 import com.reemplazable.playtopulsar.handler.task.StopPlayerRunnable;
@@ -23,8 +21,7 @@ public class PlayToXbmcHandler extends Handler {
 		
 	private ExecutorService executor;
 	private Map<String, ?> params;
-	private Uri uri;
-	private Site site;
+	private String uriString;
 	
 	public PlayToXbmcHandler(PlayToPulsarActivity activity) {
 		executor = Executors.newFixedThreadPool(1);
@@ -39,16 +36,15 @@ public class PlayToXbmcHandler extends Handler {
         	this.stopPlayer(msg.getData().getInt(PlayToXbmcActivityMessage.xbmcStopPlayer.name()));
             break;
         case xbmcPlayFile :
-        	this.playFile(uri, site);
+        	this.playFile(uriString);
         	break;
         }
 			
         super.handleMessage(msg);
 	}
 	
-	public void playToXbmc(Uri uri, Site site) {
-		this.uri = uri;
-		this.site = site;
+	public void playToXbmc(String uriString) {
+		this.uriString = uriString;
 		this.execute(new PlayToXbmcRunnable(params, this));
 	}
 
@@ -56,8 +52,8 @@ public class PlayToXbmcHandler extends Handler {
 		this.execute(new StopPlayerRunnable(params, playerId));
 	}
 	
-	private void playFile(Uri uri, Site site) {
-		this.execute(new PlayItemRunnable(params, uri, site));
+	private void playFile(String uriString) {
+		this.execute(new PlayItemRunnable(params, uriString));
 	}
 
 	private void execute(Runnable runnable) {
