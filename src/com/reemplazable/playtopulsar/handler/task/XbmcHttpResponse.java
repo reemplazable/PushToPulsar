@@ -40,4 +40,8 @@ public abstract class XbmcHttpResponse implements ResponseHandler<Object> {
 		}
 	}
 	
+	public void handleError(Exception e) {
+		e.printStackTrace();
+	}
+	
 }

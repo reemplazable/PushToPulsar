@@ -4,9 +4,7 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-sdk
-        android:minSdkVersion="8"
-        android:targetSdkVersion="18" />
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="18" />
     
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -76,14 +74,15 @@
             		<data android:pathPattern=".*\\..*\\..*\\..*\\.torrent" android:scheme="file"/>
             		<data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.torrent" android:scheme="file"/>
 		    </intent-filter>
-            <!-- <intent-filter>
+            <intent-filter>
                     <action android:name="android.intent.action.SEND" />
                     <category android:name="android.intent.category.DEFAULT" />
                     <data android:mimeType="text/*"/>
             </intent-filter>
-             -->
         </activity>
         <activity android:name="com.reemplazable.playtopulsar.SettingsActivity"/>
+        <service android:name="com.reemplazable.playtopulsar.PlayToPulsarService" android:exported="false"/>
+        
     </application>
 
 </manifest>

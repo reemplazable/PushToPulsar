@@ -6,9 +6,8 @@ import java.util.concurrent.Executors;
 
 import android.os.Handler;
 import android.os.Message;
-import android.preference.PreferenceManager;
 
-import com.reemplazable.playtopulsar.PlayToPulsarActivity;
+import com.reemplazable.playtopulsar.PushEndListener;
 import com.reemplazable.playtopulsar.handler.task.PlayItemRunnable;
 import com.reemplazable.playtopulsar.handler.task.PlayToXbmcRunnable;
 import com.reemplazable.playtopulsar.handler.task.StopPlayerRunnable;
@@ -16,16 +15,18 @@ import com.reemplazable.playtopulsar.handler.task.StopPlayerRunnable;
 public class PlayToXbmcHandler extends Handler {
 
 	public enum PlayToXbmcActivityMessage {
-		xbmcStopPlayer, xbmcPlayFile;
+		xbmcStopPlayer, xbmcPlayFile, xbmcPlaySent;
 	}
 		
 	private ExecutorService executor;
 	private Map<String, ?> params;
 	private String uriString;
+	private PushEndListener pushEndListener;
 	
-	public PlayToXbmcHandler(PlayToPulsarActivity activity) {
-		executor = Executors.newFixedThreadPool(1);
-		params = PreferenceManager.getDefaultSharedPreferences(activity).getAll();
+	public PlayToXbmcHandler(PushEndListener pushEndListener, Map<String, ?> params) {
+		this.executor = Executors.newFixedThreadPool(1);
+		this.params = params;
+		this.pushEndListener = pushEndListener;
 	}
 	
 	@Override
@@ -37,6 +38,9 @@ public class PlayToXbmcHandler extends Handler {
             break;
         case xbmcPlayFile :
         	this.playFile(uriString);
+        	break;
+        case xbmcPlaySent :
+        	pushEndListener.end();
         	break;
         }
 			
@@ -53,7 +57,7 @@ public class PlayToXbmcHandler extends Handler {
 	}
 	
 	private void playFile(String uriString) {
-		this.execute(new PlayItemRunnable(params, uriString));
+		this.execute(new PlayItemRunnable(params, uriString, this));
 	}
 
 	private void execute(Runnable runnable) {

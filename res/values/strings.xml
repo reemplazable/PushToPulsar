@@ -6,6 +6,7 @@
     <string name="xbmc_connection_status">XBMC Connection status</string>
     <string name="push_to_pulsar">Push to pulsar</string>
     <string name="toast_need_host">Please set XMBC/Kodi host and port</string>
+    <string name="toast_not_a_torrent">The information in the clipboard it is not a torrent</string>
 
     <!-- preferences -->
     <string name="pref_host_category">XBMC host address</string>
@@ -19,5 +20,9 @@
     <string name="pref_password">Password</string>
     <string name="pref_password_summary">Password for XBMC/Kodi authenticated connections</string>
     <string name="pref_switch_auth_summary">Set it on if your XBMC/Kodi connection authentication is enabled</string>
+    <string name="pref_direct_submit_switch_on">Automatic submit is enabled</string>
+    <string name="pref_direct_submit_switch_off">Automatic submit is disabled</string>
+    <string name="pref_switch_direct_submit_summary">Set it on if your want to submit the torrent to XBMC/Kodi directly</string>
+    <string name="copy_from_clipboard">Paste from clipboard</string>
 
 </resources>

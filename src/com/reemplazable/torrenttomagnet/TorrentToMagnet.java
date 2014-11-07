@@ -18,9 +18,11 @@ import org.ardverk.coding.BencodingInputStream;
 import org.ardverk.coding.BencodingOutputStream;
 
 import android.net.Uri;
+import android.util.Log;
 
 public class TorrentToMagnet {
 	
+	private static final String TAG = "TorrentToMagnet";
 	private MessageDigest sha1Digester = null;
 	
 	public TorrentToMagnet() throws NoSuchAlgorithmException {
@@ -38,12 +40,15 @@ public class TorrentToMagnet {
 	public String toMagnet(String torrentFile) throws IOException {
 		BencodingInputStream bencodingISToString = null;
 		try {
+			Log.d(TAG, "File to read: " + torrentFile);
 			String hash = this.calculateHash(torrentFile);
+			sha1Digester.reset();
 			DigestInputStream stream = new DigestInputStream(new BufferedInputStream(new FileInputStream(torrentFile)), sha1Digester);
 			bencodingISToString = new BencodingInputStream(stream, true);
 			Map<String, ?> torrentMap = (Map<String, ?>) bencodingISToString.readMap();
 			return "magnet:?xt=" + "urn:btih:" + hash + "&" + this.createDisplayName(torrentMap) + "&" + this.createLength(torrentMap) + this.createAnounce(torrentMap);
 		} catch (IOException e) {
+			Log.d(TAG, "File to read error: " + e.getCause());
 			e.printStackTrace();
 		}
 		finally {
@@ -88,6 +93,7 @@ public class TorrentToMagnet {
 			sha1Digester.reset();
 			DigestInputStream stream = new DigestInputStream(new BufferedInputStream(new FileInputStream(torrentFile)), sha1Digester);
 			bencodingIS = new BencodingInputStream(stream, false);
+			int firstRead = bencodingIS.read();
 			return mapToHash(((Map<String, ?>) bencodingIS.readMap().get("info")));
 		} finally {
 			if (bencodingIS != null) {

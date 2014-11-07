@@ -5,5 +5,6 @@
         <SwitchPreference android:summaryOn="@string/pref_auth_switch_on" android:key="pref_switch_auth" android:summaryOff="@string/pref_auth_switch_off" android:summary="@string/pref_switch_auth_summary"/>
         <EditTextPreference android:dependency="pref_switch_auth" android:key="pref_username" android:summary="@string/pref_username_summary" android:title="@string/pref_username"/>
         <EditTextPreference android:dependency="pref_switch_auth" android:key="pref_password" android:summary="@string/pref_password_summary" android:title="@string/pref_password" android:inputType="textPassword"/>
+        <SwitchPreference android:summaryOn="@string/pref_direct_submit_switch_on" android:key="pref_switch_direct_submit" android:summaryOff="@string/pref_direct_submit_switch_off" android:summary="@string/pref_switch_direct_submit_summary"/>
     </PreferenceCategory>
 </PreferenceScreen>

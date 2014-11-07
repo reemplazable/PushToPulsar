@@ -30,6 +30,13 @@ public class CheckXbmcConnectionRunnable extends XbmcConnection implements Runna
 					handler.sendMessage(message);
 				}
         	}
+        	
+        	@Override
+        	public void handleError(Exception e) {
+        		super.handleError(e);
+        		final Message message = new Message();
+                message.what = CheckXbmcConnectionActivityHandler.CheckXbmcConnectionActivityMessage.xbmcConnectionDisabled.ordinal();
+        	}
 		};
 		
 		sendMessage("{\"jsonrpc\": \"2.0\", \"method\": \"JSONRPC.Ping\", \"id\": 2}", responseHandler);

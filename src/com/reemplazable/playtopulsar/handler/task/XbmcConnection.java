@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -45,9 +43,7 @@ public class XbmcConnection {
 		sendMessage(jsonMmessage, getEmptyHandler());
 	}
 	
-	void sendMessage(String jsonMmessage, ResponseHandler<Object> response) {
-	    //convert parameters into JSON object
-	    //JSONObject holder = getJsonObjectFromMap(params);
+	void sendMessage(String jsonMmessage, XbmcHttpResponse response) {
 	    StringEntity se = null;
 		try {
 			se = new StringEntity(jsonMmessage);
@@ -55,30 +51,21 @@ public class XbmcConnection {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-
-	    this.httpPost.setEntity(se);
-
 	    try {
 	    	Log.d(TAG, "execute post: " + jsonMmessage);
 			httpClient.execute(httpPost, response);
 		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			response.handleError(e);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			
+			response.handleError(e);
 		}
 	}
 	
-	private ResponseHandler<Object> getEmptyHandler() {
-		return new ResponseHandler<Object>() {
+	private XbmcHttpResponse getEmptyHandler() {
+		return new XbmcHttpResponse () {
 			@Override
-			public Object handleResponse(HttpResponse response)
-					throws ClientProtocolException, IOException {
-				Log.d(TAG, response.toString());
-				return response;
+			protected void handleResult(Object result) {
+				Log.d(TAG, result.toString());
 			}
 		};
 	}

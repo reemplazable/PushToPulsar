@@ -14,7 +14,7 @@ import com.reemplazable.playtopulsar.handler.task.CheckXbmcConnectionRunnable;
 public class CheckXbmcConnectionActivityHandler extends Handler{
 
 	public enum CheckXbmcConnectionActivityMessage {
-		xbmcConnection
+		xbmcConnection, xbmcConnectionDisabled
 	}
 	
 	private PlayToPulsarActivity activity;
@@ -35,6 +35,9 @@ public class CheckXbmcConnectionActivityHandler extends Handler{
         case xbmcConnection :
         	activity.activateConnection();
             break;
+        case xbmcConnectionDisabled:
+        	activity.deactivateConnection();
+        	break;
         }
         super.handleMessage(msg);
 	}
