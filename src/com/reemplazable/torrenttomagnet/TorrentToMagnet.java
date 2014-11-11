@@ -93,7 +93,6 @@ public class TorrentToMagnet {
 			sha1Digester.reset();
 			DigestInputStream stream = new DigestInputStream(new BufferedInputStream(new FileInputStream(torrentFile)), sha1Digester);
 			bencodingIS = new BencodingInputStream(stream, false);
-			int firstRead = bencodingIS.read();
 			return mapToHash(((Map<String, ?>) bencodingIS.readMap().get("info")));
 		} finally {
 			if (bencodingIS != null) {

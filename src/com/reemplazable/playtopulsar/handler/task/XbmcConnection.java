@@ -28,7 +28,7 @@ public class XbmcConnection {
 		this.httpPost = new HttpPost(host);
 		this.httpPost.setHeader("Accept", "application/json, text/javascript");
 		this.httpPost.setHeader("Content-type", "application/json");
-		if (userAuthEnabled) {
+		if (userAuthEnabled != null && userAuthEnabled) {
 			String username = (String) params.get("pref_username");
 			String password = (String) params.get("pref_password");
 			if (username != null && username.length() > 0 && password != null && password.length() > 0){

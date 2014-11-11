@@ -74,16 +74,11 @@ public class PlayToPulsarActivity extends ActionBarActivity implements PushEndLi
 		Log.d(TAG, "host: " + host);
 		getUriFromIntent();
 		enablePushButton();
-		if (host != null && host.length() <= 0) {
+		if (host == null || host.length() <= 0) {
 			showSettings();
 		} else {
-			checkXbmcConnectionhandler.checkConnection();
 			this.playToXbmcHandler = new PlayToXbmcHandler(this, preferences.getAll());
-			if (uriString != null) {
-				if (getAutomaticPlayToXbmc()) {
-					this.finish();
-				}
-			}
+			checkXbmcConnectionhandler.checkConnection();
 		}
 	}
 
@@ -123,7 +118,6 @@ public class PlayToPulsarActivity extends ActionBarActivity implements PushEndLi
 		Toast toast = Toast.makeText(getApplicationContext(), R.string.toast_need_host, Toast.LENGTH_LONG);
 		toast.show();
 		launchSettingsActivity();
-		checkXbmcConnectionhandler.checkConnection();
 	}
 
 	private void showError(Exception e, Uri uri) {
@@ -187,6 +181,7 @@ public class PlayToPulsarActivity extends ActionBarActivity implements PushEndLi
 				Intent intent = new Intent(this, PlayToPulsarService.class);
 				intent.putExtra(PlayToPulsarService.uriString, uriString);
 				this.startService(intent);
+				this.finish();
 			}
 		}
 	}
